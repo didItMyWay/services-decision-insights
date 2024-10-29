@@ -3,8 +3,9 @@ import json
 import re
 
 # AWS SQS configuration
-sqs = boto3.client('sqs', region_name='us-east-1')  # Replace with your region
-queue_url = 'https://sqs.us-east-1.amazonaws.com/YOUR_ACCOUNT_ID/YOUR_QUEUE_NAME'  # Replace with your SQS queue URL
+sqs = boto3.client('sqs', region_name='us-east-1')  # Replace
+validator_queue_url = 'https://sqs.us-east-1.amazonaws.com/YOUR_ACCOUNT_ID/VALIDATOR_QUEUE_NAME'  # Replace with books-validator queue URL
+processor_queue_url = 'https://sqs.us-east-1.amazonaws.com/YOUR_ACCOUNT_ID/PROCESSOR_QUEUE_NAME'  # Replace with books-processor queue URL
 
 # Validation rules
 def validate_book(book):
@@ -21,6 +22,10 @@ def validate_book(book):
     # Check for book title
     if not book.get('title') or len(book['title'].strip()) == 0:
         errors.append('Book title is required')
+    
+    # Check for seller name
+    if not book.get('seller_name') or len(book['seller_name'].strip()) == 0:
+        errors.append('Seller name is required')
 
     # Validate URL (if present)
     url_pattern = re.compile(r'^(https?|ftp)://[^\s/$.?#].[^\s]*$')
@@ -29,11 +34,23 @@ def validate_book(book):
 
     return errors
 
-# Function to process messages from SQS
+# Send valid books to books-processor queue
+def send_to_processor_queue(book):
+    try:
+        response = sqs.send_message(
+            QueueUrl=processor_queue_url,
+            MessageBody=json.dumps(book)
+        )
+        print(f"Valid book sent to books-processor queue: {book['title']} (MessageId: {response['MessageId']})")
+    except Exception as e:
+        print(f"Error sending book to processor queue: {e}")
+
+
+# Process messages from the validator queue
 def process_messages():
     try:
         response = sqs.receive_message(
-            QueueUrl=queue_url,
+            QueueUrl=validator_queue_url,
             MaxNumberOfMessages=10,  # Adjust batch size
             WaitTimeSeconds=10
         )
@@ -52,10 +69,10 @@ def process_messages():
                     # Optionally, move invalid books to a dead-letter queue or log for further processing
                 else:
                     print(f"Book '{body['title']}' is valid!")
-                    # Process the valid book (forward to the next service, save, etc.)
+                    send_to_processor_queue(body)  # Send valid books to processor queue
 
                 # Delete the message from the queue after processing
-                sqs.delete_message(QueueUrl=queue_url, ReceiptHandle=message['ReceiptHandle'])
+                sqs.delete_message(QueueUrl=validator_queue_url, ReceiptHandle=message['ReceiptHandle'])
                 print(f"Message deleted: {message['MessageId']}")
 
         else:
@@ -64,6 +81,8 @@ def process_messages():
     except Exception as e:
         print(f"Error processing messages: {e}")
 
-# Start processing books from the queue
-while True:
-    process_messages()
+
+# Start processing books
+if __name__ == "__main__":
+    while True:
+        process_messages()
