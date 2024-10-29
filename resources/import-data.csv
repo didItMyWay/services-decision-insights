@@ -1,4 +1,21 @@
-merchant_id, title, author, price
-1,The Great Gatsby,F. Scott Fitzgerald,10.99
-2,1984,George Orwell,8.99
-3,To Kill a Mockingbird,Harper Lee,12.99
+merchant_id,title,author,price,seller_name,url
+1,The Great Gatsby,F. Scott Fitzgerald,10.99,BooksForAll,https://example.com/great-gatsby
+2,1984,George Orwell,8.99,SpreadingKnowledge,https://example.com/1984
+3,To Kill a Mockingbird,Harper Lee,12.99,UNDEFINED,https://example.com/to-kill-a-mockingbird
+4,The Catcher in the Rye,J.D. Salinger,9.99,BookHaven,https://example.com/catcher-in-the-rye
+5,Pride and Prejudice,Jane Austen,14.99,LiteratureLovers,https://example.com/pride-and-prejudice
+6,Moby Dick,Herman Melville,11.50,ClassicReads,https://example.com/moby-dick
+7,War and Peace,Leo Tolstoy,15.00,UNDEFINED,https://example.com/war-and-peace
+8,The Lord of the Rings,J.R.R. Tolkien,,FantasyWorld,https://example.com/lord-of-the-rings
+9,The Hobbit,J.R.R. Tolkien,15.99,FantasyWorld,https://example.com/hobbit
+10,Brave New World,Aldous Huxley,,BooksForAll,https://example.com/brave-new-world
+11,The Picture of Dorian Gray,Oscar Wilde,10.49,SpreadingKnowledge,https://example.com/picture-of-dorian-gray
+12,The Chronicles of Narnia,C.S. Lewis,,BookHaven,https://example.com/chronicles-of-narnia
+13,Fahrenheit 451,Ray Bradbury,12.75,LiteratureLovers,https://example.com/fahrenheit-451
+14,The Alchemist,o,8.99,ClassicReads,https://example.com/alchemist
+15,The Bell Jar,Sylvia Plath,10.50,UNDEFINED,https://example.com/bell-jar
+16,Animal Farm,George Orwell,9.50,HistoryBuffs,https://example.com/animal-farm
+17,The Grapes of Wrath,John Steinbeck,13.99,BooksForAll,https://example.com/grapes-of-wrath
+18,The Fault in Our Stars,John Green,7.99,SpreadingKnowledge,https://example.com/fault-in-our-stars
+19,The Road,Cormac McCarthy,15.99,BookHaven,https://example.com/road
+20,The Shining,Stephen King,,LiteratureLovers,
